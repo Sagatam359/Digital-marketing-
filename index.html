@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Marketing Introduction</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        .slider-container {
+            position: relative;
+            width: 85%;
+            max-width: 800px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: all 0.6s ease-in-out;
+        }
+
+        .slide.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .slide.prev-slide {
+            transform: translateX(-100%);
+        }
+
+        .slide h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #00d2ff;
+            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+
+        .slide p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #e0e0e0;
+            max-width: 600px;
+        }
+
+        .btn-container {
+            position: absolute;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 30px;
+        }
+
+        button {
+            background: #00d2ff;
+            color: #000;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        button:hover {
+            background: #0080ff;
+            color: #fff;
+            transform: scale(1.05);
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .dot.active {
+            background: #00d2ff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slider-container">
+        <!-- Slide 1 -->
+        <div class="slide active">
+            <h2>ডিজিটাল মার্কেটিং কি?</h2>
+            <p>ডিজিটাল মার্কেটিং হলো ইন্টারনেট এবং ডিজিটাল ডিভাইস (যেমন- মোবাইল, কম্পিউটার, সোশাল মিডিয়া) ব্যবহার করে পণ্য, সেবা বা ব্র্যান্ডের প্রচার ও প্রসার করার একটি আধুনিক পদ্ধতি।</p>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide">
+            <h2>ডিজিটাল মার্কেটিং এর গুরুত্ব</h2>
+            <p>কম খরচে সঠিক কাস্টমারের কাছে পৌঁছানো যায়, রেজাল্ট সঙ্গে সঙ্গে ট্র্যাক করা যায় এবং খুব দ্রুত ব্র্যান্ড তৈরি করা সম্ভব হয়।</p>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide">
+            <h2>মূল উপাদানসমূহ (Key Components)</h2>
+            <p>১. Social Media Marketing (SMM)<br>
+               ২. Search Engine Optimization (SEO)<br>
+               ৩. Content Marketing<br>
+               ৪. Email & Affiliate Marketing</p>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide">
+            <h2>ক্যারিয়ার ও সুযোগ</h2>
+            <p>ডিজিটাল মার্কেটিং শিখে ফ্রিল্যান্সিং, জব, এজেন্সিতে কাজ বা নিজের ব্যবসাকে ইন্টারনেটে বৃদ্ধি করার বিশাল সুযোগ রয়েছে।</p>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div class="btn-container">
+            <button id="prevBtn">আগেরটি</button>
+            <button id="nextBtn">পরেরটি</button>
+        </div>
+
+        <!-- Dots Navigation -->
+        <div class="dots">
+            <span class="dot active" onclick="currentSlide(0)"></span>
+            <span class="dot" onclick="currentSlide(1)"></span>
+            <span class="dot" onclick="currentSlide(2)"></span>
+            <span class="dot" onclick="currentSlide(3)"></span>
+        </div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.dot');
+        const nextBtn = document.getElementById('nextBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active', 'prev-slide');
+                if (i === index) {
+                    slide.classList.add('active');
+                } else if (i < index) {
+                    slide.classList.add('prev-slide');
+                }
+            });
+
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === index);
+            });
+        }
+
+        nextBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        });
+
+        prevBtn.addEventListener('click', () => {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            showSlide(currentIndex);
+        });
+
+        function currentSlide(index) {
+            currentIndex = index;
+            showSlide(currentIndex);
+        }
+    </script>
+</body>
+</html>
