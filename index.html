@@ -9,11 +9,11 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            background: radial-gradient(circle at center, #0f172a, #020617);
             height: 100vh;
             display: flex;
             justify-content: center;
@@ -22,17 +22,54 @@
             overflow: hidden;
         }
 
+        /* Music Toggle Button */
+        .music-btn {
+            position: absolute;
+            top: 25px;
+            right: 25px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #fff;
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 100;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+        }
+
+        .music-btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+        }
+
         .slider-container {
             position: relative;
-            width: 85%;
-            max-width: 800px;
-            height: 400px;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 90%;
+            max-width: 850px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             overflow: hidden;
+        }
+
+        /* Slide Content Container */
+        .slides-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
         }
 
         .slide {
@@ -41,170 +78,344 @@
             left: 0;
             width: 100%;
             height: 100%;
-            padding: 50px;
+            padding: 60px 40px 80px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
             opacity: 0;
-            transform: translateX(100%);
-            transition: all 0.6s ease-in-out;
+            visibility: hidden;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s;
         }
 
         .slide.active {
             opacity: 1;
-            transform: translateX(0);
+            visibility: visible;
         }
 
-        .slide.prev-slide {
-            transform: translateX(-100%);
+        /* Animated Content Elements */
+        .slide-badge {
+            background: linear-gradient(135deg, #06b6d4, #3b82f6);
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(6, 182, 212, 0.3);
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.6s ease 0.2s;
         }
 
         .slide h2 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
-            color: #00d2ff;
-            text-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            font-size: 2.3rem;
+            margin-bottom: 18px;
+            background: linear-gradient(135deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transform: translateY(25px);
+            opacity: 0;
+            transition: all 0.6s ease 0.3s;
         }
 
         .slide p {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: #e0e0e0;
-            max-width: 600px;
+            font-size: 1.15rem;
+            line-height: 1.7;
+            color: #cbd5e1;
+            max-width: 650px;
+            transform: translateY(30px);
+            opacity: 0;
+            transition: all 0.6s ease 0.4s;
         }
 
-        .btn-container {
+        /* Active State Animation Trigger */
+        .slide.active .slide-badge,
+        .slide.active h2,
+        .slide.active p {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Progress Bar for Auto-play */
+        .progress-bar {
             position: absolute;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 30px;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            width: 0%;
+            transition: width 0.1s linear;
         }
 
-        button {
-            background: #00d2ff;
-            color: #000;
-            border: none;
-            padding: 10px 22px;
-            border-radius: 25px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease, transform 0.2s ease;
-        }
-
-        button:hover {
-            background: #0080ff;
+        /* Navigation Buttons */
+        .btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             color: #fff;
-            transform: scale(1.05);
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
         }
 
+        .btn:hover {
+            background: rgba(56, 189, 248, 0.2);
+            border-color: #38bdf8;
+            box-shadow: 0 0 20px rgba(56, 189, 248, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .prev-btn { left: 20px; }
+        .next-btn { right: 20px; }
+
+        /* Dots Indicator */
         .dots {
             position: absolute;
             bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: 12px;
+            z-index: 10;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 20px;
             cursor: pointer;
-            transition: background 0.3s ease;
+            transition: all 0.4s ease;
         }
 
         .dot.active {
-            background: #00d2ff;
+            background: #38bdf8;
+            width: 32px;
+            box-shadow: 0 0 12px rgba(56, 189, 248, 0.6);
+        }
+
+        @media (max-width: 600px) {
+            .slider-container { height: 420px; }
+            .slide { padding: 40px 20px 60px; }
+            .slide h2 { font-size: 1.7rem; }
+            .slide p { font-size: 1rem; }
+            .prev-btn { left: 10px; }
+            .next-btn { right: 10px; }
+            .music-btn { top: 15px; right: 15px; font-size: 0.8rem; padding: 8px 14px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="slider-container">
-        <!-- Slide 1 -->
-        <div class="slide active">
-            <h2>ডিজিটাল মার্কেটিং কি?</h2>
-            <p>ডিজিটাল মার্কেটিং হলো ইন্টারনেট এবং ডিজিটাল ডিভাইস (যেমন- মোবাইল, কম্পিউটার, সোশাল মিডিয়া) ব্যবহার করে পণ্য, সেবা বা ব্র্যান্ডের প্রচার ও প্রসার করার একটি আধুনিক পদ্ধতি।</p>
-        </div>
+    <!-- Music Control Button -->
+    <button class="music-btn" id="musicToggle">
+        <span id="musicIcon">🎵</span> <span id="musicText">Music On</span>
+    </button>
 
-        <!-- Slide 2 -->
-        <div class="slide">
-            <h2>ডিজিটাল মার্কেটিং এর গুরুত্ব</h2>
-            <p>কম খরচে সঠিক কাস্টমারের কাছে পৌঁছানো যায়, রেজাল্ট সঙ্গে সঙ্গে ট্র্যাক করা যায় এবং খুব দ্রুত ব্র্যান্ড তৈরি করা সম্ভব হয়।</p>
-        </div>
+    <!-- Background Audio File -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" type="audio/mpeg">
+    </audio>
 
-        <!-- Slide 3 -->
-        <div class="slide">
-            <h2>মূল উপাদানসমূহ (Key Components)</h2>
-            <p>১. Social Media Marketing (SMM)<br>
-               ২. Search Engine Optimization (SEO)<br>
-               ৩. Content Marketing<br>
-               ৪. Email & Affiliate Marketing</p>
-        </div>
+    <div class="slider-container" id="sliderContainer">
+        <!-- Progress Bar for Auto-play -->
+        <div class="progress-bar" id="progressBar"></div>
 
-        <!-- Slide 4 -->
-        <div class="slide">
-            <h2>ক্যারিয়ার ও সুযোগ</h2>
-            <p>ডিজিটাল মার্কেটিং শিখে ফ্রিল্যান্সিং, জব, এজেন্সিতে কাজ বা নিজের ব্যবসাকে ইন্টারনেটে বৃদ্ধি করার বিশাল সুযোগ রয়েছে।</p>
+        <div class="slides-wrapper">
+            <!-- Slide 1 -->
+            <div class="slide active">
+                <span class="slide-badge">Introduction</span>
+                <h2>ডিজিটাল মার্কেটিং কি?</h2>
+                <p>ডিজিটাল মার্কেটিং হলো ইন্টারনেট এবং আধুনিক ইলেকট্রনিক ডিভাইস ব্যবহার করে পণ্য, সেবা বা ব্র্যান্ডের প্রচার ও প্রসার করার সবচাইতে কার্যকর পদ্ধতি।</p>
+            </div>
+
+            <!-- Slide 2 -->
+            <div class="slide">
+                <span class="slide-badge">SEO</span>
+                <h2>Search Engine Optimization</h2>
+                <p>গুগল বা অন্যান্য সার্চ ইঞ্জিনের রেজাল্ট তালিকায় আপনার ওয়েবসাইট ফ্রিতে উপরে নিয়ে আসার জন্য ওয়েবসাইটকে অপটিমাইজ করার কৌশল।</p>
+            </div>
+
+            <!-- Slide 3 -->
+            <div class="slide">
+                <span class="slide-badge">SMM</span>
+                <h2>Social Media Marketing</h2>
+                <p>ফেসবুক, ইনস্টাগ্রাম, ইউটিউব ইত্যাদির মাধ্যমে কাঙ্ক্ষিত কাস্টমারের কাছে সঠিক বার্তা পৌঁছে দেওয়া এবং ব্র্যান্ড এনগেজমেন্ট বাড়ানো।</p>
+            </div>
+
+            <!-- Slide 4 -->
+            <div class="slide">
+                <span class="slide-badge">Email & Affiliate</span>
+                <h2>Affiliate & Email Marketing</h2>
+                <p>ইমেইলের মাধ্যমে সরাসরি কাস্টমারের সাথে যোগাযোগ রক্ষা করা এবং অ্যাফিলিয়েট পার্টনারশিপের মাধ্যমে অন্যের পণ্য প্রচার করে কমিশন অর্জন করা।</p>
+            </div>
+
+            <!-- Slide 5 -->
+            <div class="slide">
+                <span class="slide-badge">Analytics</span>
+                <h2>Data Analytics & Performance</h2>
+                <p>ডিজিটাল মার্কেটিং এর সবচেয়ে বড় সুবিধা হলো আপনার বিজ্ঞাপন বা ক্যাম্পেইনের ফলাফল লাইভ ট্র্যাক করা এবং পরিমাপ করা সম্ভব।</p>
+            </div>
+
+            <!-- Slide 6 -->
+            <div class="slide">
+                <span class="slide-badge">AI & Future</span>
+                <h2>ডিজিটাল মার্কেটিং এর ভবিষ্যৎ</h2>
+                <p>কৃত্রিম বুদ্ধিমত্তা (AI) ও অটোমেশন ব্যবহারের মাধ্যমে ডিজিটাল মার্কেটিং দিন দিন আরও বেশি নির্ভুল, দ্রুত এবং প্রভাবশালী হয়ে উঠছে।</p>
+            </div>
+
+            <!-- Slide 7 -->
+            <div class="slide">
+                <span class="slide-badge">Career</span>
+                <h2>কেন এটি শিখবেন?</h2>
+                <p>বর্তমান ডিজিটাল যুগে যেকোনো ব্যবসা সফল করা, ফ্রিল্যান্সিং ক্যারিয়ার গড়া অথবা আইটি সেক্টরে ভালো চাকরির জন্য এটি শেখা অত্যন্ত প্রয়োজনীয়।</p>
+            </div>
         </div>
 
         <!-- Navigation Buttons -->
-        <div class="btn-container">
-            <button id="prevBtn">আগেরটি</button>
-            <button id="nextBtn">পরেরটি</button>
-        </div>
+        <button class="btn prev-btn" id="prevBtn">&#10094;</button>
+        <button class="btn next-btn" id="nextBtn">&#10095;</button>
 
         <!-- Dots Navigation -->
-        <div class="dots">
-            <span class="dot active" onclick="currentSlide(0)"></span>
-            <span class="dot" onclick="currentSlide(1)"></span>
-            <span class="dot" onclick="currentSlide(2)"></span>
-            <span class="dot" onclick="currentSlide(3)"></span>
-        </div>
+        <div class="dots" id="dotsContainer"></div>
     </div>
 
     <script>
         const slides = document.querySelectorAll('.slide');
-        const dots = document.querySelectorAll('.dot');
-        const nextBtn = document.getElementById('nextBtn');
         const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dotsContainer = document.getElementById('dotsContainer');
+        const progressBar = document.getElementById('progressBar');
+        const sliderContainer = document.getElementById('sliderContainer');
+        
+        // Music Elements
+        const bgMusic = document.getElementById('bgMusic');
+        const musicToggle = document.getElementById('musicToggle');
+        const musicIcon = document.getElementById('musicIcon');
+        const musicText = document.getElementById('musicText');
+        let isMusicPlaying = false;
+
         let currentIndex = 0;
+        const slideInterval = 5000;
+        let autoPlayTimer;
+        let progressInterval;
+        let progressWidth = 0;
 
-        function showSlide(index) {
-            slides.forEach((slide, i) => {
-                slide.classList.remove('active', 'prev-slide');
-                if (i === index) {
-                    slide.classList.add('active');
-                } else if (i < index) {
-                    slide.classList.add('prev-slide');
-                }
-            });
-
-            dots.forEach((dot, i) => {
-                dot.classList.toggle('active', i === index);
-            });
+        // Music Toggle Function
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicIcon.textContent = '🔇';
+                musicText.textContent = 'Music Off';
+                isMusicPlaying = false;
+            } else {
+                bgMusic.play().then(() => {
+                    musicIcon.textContent = '🎵';
+                    musicText.textContent = 'Music On';
+                    isMusicPlaying = true;
+                }).catch(err => console.log("Audio play blocked by browser"));
+            }
         }
 
-        nextBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex + 1) % slides.length;
-            showSlide(currentIndex);
+        musicToggle.addEventListener('click', toggleMusic);
+
+        // Auto play music on first click anywhere on page
+        document.body.addEventListener('click', () => {
+            if (!isMusicPlaying && bgMusic.paused) {
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicIcon.textContent = '🎵';
+                    musicText.textContent = 'Music On';
+                }).catch(() => {});
+            }
+        }, { once: true });
+
+        // Dynamic Dots Creation
+        slides.forEach((_, index) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dot.addEventListener('click', () => goToSlide(index));
+            dotsContainer.appendChild(dot);
         });
 
-        prevBtn.addEventListener('click', () => {
-            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
-            showSlide(currentIndex);
-        });
+        const dots = document.querySelectorAll('.dot');
 
-        function currentSlide(index) {
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                slide.classList.toggle('active', index === currentIndex);
+            });
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentIndex);
+            });
+
+            resetProgress();
+        }
+
+        function goToSlide(index) {
             currentIndex = index;
-            showSlide(currentIndex);
+            updateSlide();
         }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            updateSlide();
+        }
+
+        function prevSlide() {
+            currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+            updateSlide();
+        }
+
+        // Auto Play & Progress Bar Logic
+        function startAutoPlay() {
+            autoPlayTimer = setInterval(nextSlide, slideInterval);
+            startProgressBar();
+        }
+
+        function stopAutoPlay() {
+            clearInterval(autoPlayTimer);
+            clearInterval(progressInterval);
+        }
+
+        function startProgressBar() {
+            progressWidth = 0;
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                progressWidth += 100 / (slideInterval / 100);
+                progressBar.style.width = progressWidth + '%';
+                if (progressWidth >= 100) clearInterval(progressInterval);
+            }, 100);
+        }
+
+        function resetProgress() {
+            stopAutoPlay();
+            progressBar.style.width = '0%';
+            startAutoPlay();
+        }
+
+        // Event Listeners
+        nextBtn.addEventListener('click', nextSlide);
+        prevBtn.addEventListener('click', prevSlide);
+
+        sliderContainer.addEventListener('mouseenter', stopAutoPlay);
+        sliderContainer.addEventListener('mouseleave', startAutoPlay);
+
+        startAutoPlay();
     </script>
 </body>
 </html>
